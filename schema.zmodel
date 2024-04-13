@@ -1,0 +1,97 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+abstract model Basic {
+  id String @id @db.VarChar(40)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+abstract model ExtendedBasic extends Basic {
+  deleted Boolean @default(false)
+  deletedAt DateTime?
+
+  creatorId String? @db.VarChar(40)
+  creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  lastEditorId String? @db.VarChar(40)
+}
+
+model User extends Basic {
+  username String @unique @db.VarChar(50)
+  nickname String? @db.VarChar(30)
+  avatar String? @db.LongText
+
+  socialInfos UserSocialInfo[]
+  walletInfos UserWalletInfo[]
+  userRoles UserRole[]
+  userSetting UserSetting?
+  scenarioConfig UserScenario[]
+}
+
+model UserWalletInfo extends Basic {
+  provider String @db.VarChar(20)
+  address String @db.VarChar(255)
+
+  userId String @db.VarChar(40)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([address])
+  @@index([address])
+}
+
+model UserSocialInfo extends Basic {
+  provider String @db.VarChar(20)
+  openId String @db.VarChar(255)
+  accessToken String @db.VarChar(255)
+  refreshToken String @db.VarChar(255)
+
+  userId String @db.VarChar(40)
+  user User @relation(fields: [userId], references: [id])
+}
+
+model UserRole {
+  id String @id @db.VarChar(40)
+  type UserRoleType
+
+  userId String @db.VarChar(40)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSetting extends Basic {
+  rpm Int @default(5)
+  rpd Int @default(50)
+
+  userId String @unique @db.VarChar(40)
+  user User @relation(fields: [userId], references: [id])
+}
+
+model UserScenario extends Basic {
+  userId String @db.VarChar(40)
+  scenarioId String @db.VarChar(40)
+  href String? @db.Text
+
+  user User @relation(fields: [userId], references: [id])
+  scenario Scenario @relation(fields: [scenarioId], references: [id])
+
+  @@unique([userId, scenarioId])
+}
+
+model Scenario extends Basic {
+  name String @unique @db.VarChar(30)
+  favicon String? @db.VarChar(1000)
+  host String? @db.VarChar(255)
+
+  UserScenario UserScenario[]
+}
+
+enum UserRoleType {
+  SystemAdmin
+  Admin
+  Scholar
+}
