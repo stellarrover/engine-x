@@ -1,9 +1,10 @@
 import fetch from 'node-fetch';
-import { SocialLoginType } from '../models/social-oauth.model';
+import { SocialLoginType } from '../../models/social-oauth.model';
 import { Injectable } from '@nestjs/common';
 import { nanoid } from 'nanoid';
-import { SignInManager, SignInResult } from '../auth-proxy.manager';
+import { SignInManager, SignInResult } from '../sign-in.manager';
 import { User } from '@prisma/client';
+import { PrismaService } from 'src/core/services/prisma';
 
 export interface SocialConfig {
   appId: string;
@@ -32,20 +33,25 @@ export interface SocialTokenInfo {
 }
 
 @Injectable()
-export class SocialManager extends SignInManager {
-  config: { [key in keyof typeof SocialLoginType]: SocialConfig };
-
-  async execute(params: {
+export class SocialManager<
+  T extends { type: SocialLoginType; code: string } = {
     type: SocialLoginType;
     code: string;
-  }): Promise<SignInResult> {
+  },
+> extends SignInManager<T> {
+  constructor(protected readonly prisma: PrismaService) {
+    super(prisma);
+
+    // TODO  Add the config to the constructor of the SocialManager class
+  }
+
+  private config: { [key in keyof typeof SocialLoginType]: SocialConfig };
+
+  async execute(params: T): Promise<SignInResult> {
     return super.execute(params);
   }
 
-  async validate(params: {
-    type: SocialLoginType;
-    code: string;
-  }): Promise<SignInResult> {
+  async validate(params: T): Promise<SignInResult> {
     const { type, code } = params;
 
     const info = await this.getUserSocialInfo(type, code);

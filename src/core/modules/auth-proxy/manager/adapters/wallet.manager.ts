@@ -4,9 +4,9 @@ import nacl from 'tweetnacl';
 import {
   WalletLoginType,
   walletSignInInput,
-} from '../models/wallet-signIn.model';
+} from '../../models/wallet-signIn.model';
 import { Injectable } from '@nestjs/common';
-import { SignInManager, SignInResult } from '../auth-proxy.manager';
+import { SignInManager, SignInResult } from '../sign-in.manager';
 import { User } from '@prisma/client';
 import { nanoid } from 'nanoid';
 
@@ -16,12 +16,14 @@ export interface UserWalletInfo {
 }
 
 @Injectable()
-export class WalletManager extends SignInManager {
-  execute(wallet: walletSignInInput): Promise<SignInResult> {
+export class WalletManager<
+  T extends walletSignInInput = walletSignInInput,
+> extends SignInManager<T> {
+  execute(wallet: T): Promise<SignInResult> {
     return super.execute(wallet);
   }
 
-  async validate(wallet: walletSignInInput): Promise<SignInResult> {
+  async validate(wallet: T): Promise<SignInResult> {
     const info = await this.getUserWalletInfo(wallet.type, wallet);
 
     if (!info || !info.address) return SignInResult.Failed;

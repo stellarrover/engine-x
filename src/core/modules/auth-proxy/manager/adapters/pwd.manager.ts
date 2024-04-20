@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { SignInManager, SignInResult } from '../auth-proxy.manager';
+import { SignInManager, SignInResult } from '../sign-in.manager';
 
 @Injectable()
-export class PwdManager extends SignInManager {
-  async validate(params: {
+export class PwdManager<
+  T extends { account: string; password: string } = {
     account: string;
     password: string;
-  }): Promise<SignInResult> {
+  },
+> extends SignInManager<T> {
+  async validate(params: T): Promise<SignInResult> {
     const { account, password } = params;
 
     const pwdInfo = await this.prisma.user.findFirst({

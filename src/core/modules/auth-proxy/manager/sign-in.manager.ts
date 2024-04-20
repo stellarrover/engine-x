@@ -32,10 +32,10 @@ export class SignInResult {
 }
 
 @Injectable()
-export abstract class SignInManager {
+export abstract class SignInManager<T = object> {
   constructor(protected readonly prisma: PrismaService) {}
 
-  protected async execute(params?: object): Promise<SignInResult> {
+  async execute(params: T): Promise<SignInResult> {
     const verified = await this.validate(params);
 
     if (verified.Succeeded) {
@@ -45,7 +45,7 @@ export abstract class SignInManager {
     return verified;
   }
 
-  abstract validate(params?: object): Promise<SignInResult>;
+  abstract validate(params: T): Promise<SignInResult>;
 
   protected async createUser(
     data: Partial<Omit<User, 'id' | 'createdAt' | 'updatedAt'>>,
