@@ -7,16 +7,20 @@ export enum WalletLoginType {
 
 @InputType()
 export class walletSignInInput {
+  @Field(() => WalletLoginType)
+  type!: WalletLoginType;
+
   @Field(() => String, { description: '地址' })
   address!: string;
-  @Field(() => WalletLoginType)
-  addressType!: WalletLoginType;
+
   @Field(() => String, { description: '消息' })
   message!: string;
-  @Field(() => String, { description: '公钥' })
-  publicKey!: string;
+
   @Field(() => String, { description: '签名' })
   signature!: string;
+
+  @Field(() => String, { description: '公钥' })
+  publicKey!: string;
 }
 
 registerEnumType(WalletLoginType, {

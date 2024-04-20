@@ -23,9 +23,10 @@ abstract model ExtendedBasic extends Basic {
 }
 
 model User extends Basic {
-  username String @unique @db.VarChar(50)
+  account String @unique @db.VarChar(50)
   nickname String? @db.VarChar(30)
   avatar String? @db.LongText
+  password String? @db.VarChar(255)
 
   socialInfos UserSocialInfo[]
   walletInfos UserWalletInfo[]

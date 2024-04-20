@@ -18,11 +18,11 @@ export enum SocialLoginType {
 
 @InputType()
 export class SocialSignInInput {
-  @Field()
-  code!: string;
-
   @Field(() => SocialLoginType)
   type!: SocialLoginType;
+
+  @Field()
+  code!: string;
 
   @Field(() => Boolean, { nullable: true })
   inactive?: boolean;

@@ -8,9 +8,9 @@
   "scripts": {
     "build": "nest build",
     "migration-gen": "npx prisma migrate dev --name ",
+    "generate-gen": "npx zenstack generate",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "compodoc": "npx compodoc -p tsconfig.json -s",
-    "generate": "npx zenstack generate",
     "start": "nest start",
     "start:process": "nest start process",
     "start:workflow": "nest start workflow",
