@@ -20,10 +20,10 @@ export class SignInResult {
 
   RequiresTwoFactor: boolean;
 
+  user: User & { userRoles: UserRole[] };
+
   static Success = new SignInResult(true);
   static Failed = new SignInResult(false);
-
-  user: User & { userRoles: UserRole[] };
 
   refreshUser(user: User & { userRoles: UserRole[] }) {
     this.user = user;
