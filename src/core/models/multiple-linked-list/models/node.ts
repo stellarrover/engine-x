@@ -1,18 +1,15 @@
 import { MultipleLinkedValue } from './value';
 
-export class MultipleLinkedListNode<
+export abstract class MultipleLinkedListNode<
   T extends MultipleLinkedValue = MultipleLinkedValue,
+  K extends MultipleLinkedListNode<T> = any,
 > {
   /**
    * @param {T} value - 当前节点的值
-   * @param {MultipleLinkedListNode<T>[]} [children] - 子链表
-   * @param {MultipleLinkedListNode<T>} next - 下一个节点
+   * @param {XMuLinListNode[]} [children] - 子链表
+   * @param {XMuLinListNode} next - 下一个节点
    */
-  constructor(
-    value: T,
-    children?: MultipleLinkedListNode<T>[],
-    next?: MultipleLinkedListNode<T>,
-  ) {
+  constructor(value: T, children?: K[], next?: K) {
     this._value = value;
     this._children = children || [];
     this._next = next || undefined;
@@ -23,13 +20,13 @@ export class MultipleLinkedListNode<
     return this._value;
   }
 
-  protected _children: MultipleLinkedListNode<T>[];
-  get children(): MultipleLinkedListNode<T>[] {
+  protected _children: K[];
+  get children(): K[] {
     return this._children;
   }
 
-  protected _next?: MultipleLinkedListNode<T>;
-  get next(): MultipleLinkedListNode<T> | undefined {
+  protected _next?: K;
+  get next(): K | undefined {
     return this._next;
   }
 
@@ -37,7 +34,7 @@ export class MultipleLinkedListNode<
    * 根据priority，将节点插入到子链中
    * @param childrenNode
    */
-  insertChildrenByPriority(childrenNode: MultipleLinkedListNode<T>): void {
+  insertChildrenByPriority(childrenNode: K): void {
     const priority = childrenNode.value.priority;
 
     if (!priority) {
@@ -65,7 +62,7 @@ export class MultipleLinkedListNode<
   flatten(): T[] {
     const result: T[] = [];
 
-    function traverse(node: MultipleLinkedListNode<T>): void {
+    function traverse(node): void {
       const { children, next, value } = node;
 
       result.push(value);
@@ -86,7 +83,7 @@ export class MultipleLinkedListNode<
   /**
    * 在尾部插入节点
    */
-  append(node: MultipleLinkedListNode): void {
+  append(node: K): void {
     const lastNode = this.lastNode;
 
     lastNode._next = node;
@@ -95,8 +92,8 @@ export class MultipleLinkedListNode<
   /**
    * 获取最后一个节点
    */
-  get lastNode(): MultipleLinkedListNode {
-    function traverse(node: MultipleLinkedListNode): MultipleLinkedListNode {
+  get lastNode(): K {
+    function traverse(node) {
       return node.next ? traverse(node.next) : node;
     }
 

@@ -14,8 +14,22 @@ generator client {
 
 enum UserRoleType {
     SystemAdmin
-    Admin
     Scholar
+}
+
+enum WorkflowNodeType {
+    AlternativeFlow
+    Component
+}
+
+enum WorkflowNodeParamYype {
+    Input
+    Output
+}
+
+enum ComponentType {
+    UI
+    AI
 }
 
 model User {
@@ -31,6 +45,9 @@ model User {
     userRoles UserRole[]
     userSetting UserSetting?
     scenarioConfig UserScenario[]
+    workflows Workflow[]
+    components Component[]
+    workflowNodes WorkflowNode[]
 }
 
 model UserWalletInfo {
@@ -95,5 +112,122 @@ model Scenario {
     name String @unique() @db.VarChar(30)
     favicon String? @db.VarChar(1000)
     host String? @db.VarChar(255)
-    UserScenario UserScenario[]
+    userScenario UserScenario[]
+    workflowScenario WorkflowScenario[]
+}
+
+model Workflow {
+    id String @id() @db.VarChar(40)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+    deleted Boolean @default(false)
+    deletedAt DateTime?
+    creatorId String? @db.VarChar(40)
+    creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+    lastEditorId String? @db.VarChar(40)
+    title String? @db.VarChar(255)
+    description String? @db.VarChar(255)
+    version Int @default(0)
+    subFlows WorkflowNode[]
+    params WorkflowParam[]
+    scenarios WorkflowScenario[]
+    aliases WorkflowAlias[]
+}
+
+model WorkflowNode {
+    id String @id() @db.VarChar(40)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+    deleted Boolean @default(false)
+    deletedAt DateTime?
+    creatorId String? @db.VarChar(40)
+    creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+    lastEditorId String? @db.VarChar(40)
+    type WorkflowNodeType
+    priority Int?
+    metadata Json?
+    optional Boolean @default(false)
+    prompt String? @db.Text()
+    parentId String? @db.VarChar(40)
+    parentNode WorkflowNode? @relation("Parent", fields: [parentId], references: [id], onDelete: Cascade)
+    subNodes WorkflowNode[] @relation("Parent")
+    nextId String? @unique() @db.VarChar(40)
+    nextNode WorkflowNode? @relation("Next", fields: [nextId], references: [id])
+    previousNode WorkflowNode? @relation("Next")
+    rootId String @db.VarChar(40)
+    root Workflow @relation(fields: [rootId], references: [id], onDelete: Cascade)
+    componentId String? @db.VarChar(40)
+    component Component? @relation(fields: [componentId], references: [id], onDelete: SetNull)
+    params WorkflowNodeParam[]
+}
+
+model WorkflowParam {
+    id String @id() @db.VarChar(40)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+    name String? @db.VarChar(255)
+    rootId String @db.VarChar(40)
+    root Workflow @relation(fields: [rootId], references: [id], onDelete: Cascade)
+    componentOutputId String? @db.VarChar(40)
+    componentOutput ComponentOutput? @relation(fields: [componentOutputId], references: [id])
+    usingNode WorkflowNodeParam[]
+}
+
+model WorkflowScenario {
+    id String @id() @db.VarChar(40)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+    recordingId String @db.VarChar(40)
+    scenarioId String @db.VarChar(40)
+    defaultHref String? @db.Text()
+    workflow Workflow @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+    scenario Scenario @relation(fields: [scenarioId], references: [id])
+}
+
+model WorkflowAlias {
+    id String @id() @db.VarChar(40)
+    alias String @db.VarChar(255)
+    workflowId String @db.VarChar(40)
+    workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+    @@unique([workflowId, alias])
+}
+
+model Component {
+    id String @id() @db.VarChar(40)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+    deleted Boolean @default(false)
+    deletedAt DateTime?
+    creatorId String? @db.VarChar(40)
+    creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+    lastEditorId String? @db.VarChar(40)
+    title String? @db.VarChar(255)
+    description String? @db.VarChar(255)
+    version Int @default(0)
+    metaData Json?
+    type ComponentType
+    usingNodes WorkflowNode[]
+    outputs ComponentOutput[]
+}
+
+model ComponentOutput {
+    id String @id() @db.VarChar(40)
+    name String @db.VarChar(255)
+    type String
+    componentId String @db.VarChar(40)
+    component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
+    usingParams WorkflowParam[]
+}
+
+model WorkflowNodeParam {
+    id String @id() @db.VarChar(40)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+    usingPromptLabel String? @db.VarChar(255)
+    type WorkflowNodeParamYype
+    nodeId String @db.VarChar(40)
+    node WorkflowNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+    paramId String @db.VarChar(40)
+    param WorkflowParam? @relation(fields: [paramId], references: [id], onDelete: Cascade)
 }

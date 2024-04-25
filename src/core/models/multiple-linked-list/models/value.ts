@@ -1,4 +1,4 @@
-export class MultipleLinkedValue {
+export abstract class MultipleLinkedValue {
   /**
    * @param init
    */

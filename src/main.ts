@@ -4,7 +4,6 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { GlobalExtension } from '@global';
 import 'dotenv/config';
 import { BootStrap } from './common/cluster';
-import { ProcessModule } from './modules/process/process.module';
 import { ConfigService } from '@nestjs/config';
 // import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 // import { GraphQLModule } from '@nestjs/graphql';
@@ -18,7 +17,6 @@ import { ConfigService } from '@nestjs/config';
     //   playground: false,
     //   plugins: [ApolloServerPluginLandingPageLocalDefault()],
     // }),
-    ProcessModule,
     // WorkflowModule,
   ],
   providers: [],

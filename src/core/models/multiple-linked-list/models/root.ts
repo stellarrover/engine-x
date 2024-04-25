@@ -1,15 +1,12 @@
 import { MultipleLinkedListNode } from './node';
 import { MultipleLinkedValue } from './value';
 
-export class MultipleLinkedList<
+export abstract class MultipleLinkedList<
   T extends MultipleLinkedValue = MultipleLinkedValue,
+  K extends MultipleLinkedListNode<T> = MultipleLinkedListNode<T>,
 > {
-  constructor(root: MultipleLinkedListNode<T>) {
-    this._root = root;
-  }
-
-  protected _root: MultipleLinkedListNode<T>;
-  get root(): MultipleLinkedListNode<T> {
+  protected _root: K;
+  get root(): K {
     return this._root;
   }
 
@@ -17,7 +14,7 @@ export class MultipleLinkedList<
     return this._root.flatten();
   }
 
-  append(node: MultipleLinkedListNode<T> | MultipleLinkedList<T>): void {
+  append(node: K | MultipleLinkedList<T, K>): void {
     this._root.append(node instanceof MultipleLinkedList ? node.root : node);
   }
 }
