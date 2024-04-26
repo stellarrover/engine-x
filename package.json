@@ -43,6 +43,7 @@
     "mime-type": "^4.0.0",
     "moment-timezone": "^0.5.45",
     "nanoid": "^5.0.7",
+    "openai": "^4.38.5",
     "prisma": "^5.11.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
