@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FileUploadManager } from '../file-upload.manager';
+import { FileUploadManagerInterface } from '../file-upload.manager';
 import { Readable } from 'stream';
 import { enginePath, stream2buffer } from '@utils';
 import {
@@ -16,7 +16,7 @@ import {
 } from 'src/common/config';
 
 @Injectable()
-export class S3Manager extends FileUploadManager {
+export class S3Manager implements FileUploadManagerInterface {
   private _client: S3Client;
   private BUCKET_NAME = S3_STORAGE_BUCKET ?? 'engine';
 
@@ -62,5 +62,5 @@ export class S3Manager extends FileUploadManager {
     };
   }
 
-  rootPath = STORAGE_PATH;
+  rootPath = () => STORAGE_PATH;
 }

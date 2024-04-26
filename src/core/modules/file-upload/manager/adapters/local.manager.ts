@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FileUploadManager } from '../file-upload.manager';
+import { FileUploadManagerInterface } from '../file-upload.manager';
 import { Readable } from 'stream';
 import fs from 'fs';
 import path from 'path';
@@ -8,7 +8,7 @@ import { enginePath, engineURL } from '@utils';
 import mime from 'mime';
 
 @Injectable()
-export class LocalManager extends FileUploadManager {
+export class LocalManager implements FileUploadManagerInterface {
   async upload(key: string, inputStream: Readable): Promise<string> {
     fs.mkdirSync(STORAGE_PATH, { recursive: true });
     fs.mkdirSync(path.resolve(STORAGE_PATH, path.dirname(key)), {
@@ -33,5 +33,6 @@ export class LocalManager extends FileUploadManager {
     };
   }
 
-  rootPath = STORAGE_WITHOUT_HOST ? enginePath(`/files`) : engineURL(`/files`);
+  rootPath = () =>
+    STORAGE_WITHOUT_HOST ? enginePath(`/files`) : engineURL(`/files`);
 }

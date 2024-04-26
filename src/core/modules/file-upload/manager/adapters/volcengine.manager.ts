@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FileUploadManager } from '../file-upload.manager';
+import { FileUploadManagerInterface } from '../file-upload.manager';
 import { Readable } from 'stream';
 import { stream2buffer } from '@utils';
 import TosClient from '@volcengine/tos-sdk';
@@ -13,7 +13,7 @@ import {
 } from 'src/common/config';
 
 @Injectable()
-export class VolcengineManager extends FileUploadManager {
+export class VolcengineManager implements FileUploadManagerInterface {
   private _client: TosClient;
 
   private get client() {
@@ -47,5 +47,5 @@ export class VolcengineManager extends FileUploadManager {
     };
   }
 
-  rootPath = VOLCENGINE_CDN_HOST;
+  rootPath = () => VOLCENGINE_CDN_HOST;
 }
