@@ -122,11 +122,11 @@ model Workflow {
     updatedAt DateTime @updatedAt()
     deleted Boolean @default(false)
     deletedAt DateTime?
-    creatorId String? @db.VarChar(40)
-    creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+    creatorId String @db.VarChar(40)
+    creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
     lastEditorId String? @db.VarChar(40)
-    title String? @db.VarChar(255)
-    description String? @db.VarChar(255)
+    title String @db.VarChar(255)
+    description String @db.VarChar(255)
     version Int @default(0)
     subFlows WorkflowNode[]
     params WorkflowParam[]
@@ -140,8 +140,8 @@ model WorkflowNode {
     updatedAt DateTime @updatedAt()
     deleted Boolean @default(false)
     deletedAt DateTime?
-    creatorId String? @db.VarChar(40)
-    creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+    creatorId String @db.VarChar(40)
+    creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
     lastEditorId String? @db.VarChar(40)
     type WorkflowNodeType
     priority Int?
@@ -199,11 +199,11 @@ model Component {
     updatedAt DateTime @updatedAt()
     deleted Boolean @default(false)
     deletedAt DateTime?
-    creatorId String? @db.VarChar(40)
-    creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+    creatorId String @db.VarChar(40)
+    creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
     lastEditorId String? @db.VarChar(40)
-    title String? @db.VarChar(255)
-    description String? @db.VarChar(255)
+    title String @db.VarChar(255)
+    description String @db.VarChar(255)
     version Int @default(0)
     metaData Json?
     type ComponentType

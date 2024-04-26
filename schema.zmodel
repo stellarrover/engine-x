@@ -8,189 +8,189 @@ generator client {
 }
 
 abstract model Basic {
-  id String @id @db.VarChar(40)
+  id        String   @id @db.VarChar(40)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 abstract model ExtendedBasic extends Basic {
-  deleted Boolean @default(false)
-  deletedAt DateTime?
+  deleted      Boolean   @default(false)
+  deletedAt    DateTime?
 
-  creatorId String? @db.VarChar(40)
-  creator User? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  lastEditorId String? @db.VarChar(40)
+  creatorId    String    @db.VarChar(40)
+  creator      User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  lastEditorId String?   @db.VarChar(40)
 }
 
 abstract model FlowBase extends ExtendedBasic {
-  title String? @db.VarChar(255)
-  description String? @db.VarChar(255)
-  version Int @default(0)
+  title       String @db.VarChar(255)
+  description String @db.VarChar(255)
+  version     Int    @default(0)
 }
 
 model User extends Basic {
-  account String @unique @db.VarChar(50)
-  nickname String? @db.VarChar(30)
-  avatar String? @db.LongText
-  password String? @db.VarChar(255)
+  account        String           @unique @db.VarChar(50)
+  nickname       String?          @db.VarChar(30)
+  avatar         String?          @db.LongText
+  password       String?          @db.VarChar(255)
 
-  socialInfos UserSocialInfo[]
-  walletInfos UserWalletInfo[]
-  userRoles UserRole[]
-  userSetting UserSetting?
+  socialInfos    UserSocialInfo[]
+  walletInfos    UserWalletInfo[]
+  userRoles      UserRole[]
+  userSetting    UserSetting?
   scenarioConfig UserScenario[]
-  workflows Workflow[]
-  components Component[]
-  workflowNodes WorkflowNode[]
+  workflows      Workflow[]
+  components     Component[]
+  workflowNodes  WorkflowNode[]
 }
 
 model UserWalletInfo extends Basic {
   provider String @db.VarChar(20)
-  address String @db.VarChar(255)
+  address  String @db.VarChar(255)
 
-  userId String @db.VarChar(40)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String @db.VarChar(40)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([address])
   @@index([address])
 }
 
 model UserSocialInfo extends Basic {
-  provider String @db.VarChar(20)
-  openId String @db.VarChar(255)
-  accessToken String @db.VarChar(255)
+  provider     String @db.VarChar(20)
+  openId       String @db.VarChar(255)
+  accessToken  String @db.VarChar(255)
   refreshToken String @db.VarChar(255)
 
-  userId String @db.VarChar(40)
-  user User @relation(fields: [userId], references: [id])
+  userId       String @db.VarChar(40)
+  user         User   @relation(fields: [userId], references: [id])
 }
 
 model UserRole {
-  id String @id @db.VarChar(40)
-  type UserRoleType
+  id     String       @id @db.VarChar(40)
+  type   UserRoleType
 
-  userId String @db.VarChar(40)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String       @db.VarChar(40)
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UserSetting extends Basic {
-  rpm Int @default(5)
-  rpd Int @default(50)
+  rpm    Int    @default(5)
+  rpd    Int    @default(50)
 
   userId String @unique @db.VarChar(40)
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model UserScenario extends Basic {
-  userId String @db.VarChar(40)
-  scenarioId String @db.VarChar(40)
-  href String? @db.Text
+  userId     String   @db.VarChar(40)
+  scenarioId String   @db.VarChar(40)
+  href       String?  @db.Text
 
-  user User @relation(fields: [userId], references: [id])
-  scenario Scenario @relation(fields: [scenarioId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  scenario   Scenario @relation(fields: [scenarioId], references: [id])
 
   @@unique([userId, scenarioId])
 }
 
 model Scenario extends Basic {
-  name String @unique @db.VarChar(30)
-  favicon String? @db.VarChar(1000)
-  host String? @db.VarChar(255)
+  name             String             @unique @db.VarChar(30)
+  favicon          String?            @db.VarChar(1000)
+  host             String?            @db.VarChar(255)
 
-  userScenario UserScenario[]
+  userScenario     UserScenario[]
   workflowScenario WorkflowScenario[]
 }
 
 model Workflow extends FlowBase {
-  subFlows WorkflowNode[]
-  params WorkflowParam[]
+  subFlows  WorkflowNode[]
+  params    WorkflowParam[]
   scenarios WorkflowScenario[]
-  aliases WorkflowAlias[]
+  aliases   WorkflowAlias[]
 }
 
 model WorkflowNode extends ExtendedBasic {
-  type WorkflowNodeType
-  priority Int?
-  metadata Json?
-  optional Boolean @default(false)
-  prompt String? @db.Text
+  type         WorkflowNodeType
+  priority     Int?
+  metadata     Json?
+  optional     Boolean             @default(false)
+  prompt       String?             @db.Text
 
-  parentId String? @db.VarChar(40)
-  parentNode WorkflowNode? @relation("Parent", fields: [parentId], references: [id], onDelete: Cascade)
-  subNodes WorkflowNode[] @relation("Parent")
+  parentId     String?             @db.VarChar(40)
+  parentNode   WorkflowNode?       @relation("Parent", fields: [parentId], references: [id], onDelete: Cascade)
+  subNodes     WorkflowNode[]      @relation("Parent")
 
-  nextId String? @unique @db.VarChar(40)
-  nextNode WorkflowNode? @relation("Next", fields: [nextId], references: [id])
-  previousNode WorkflowNode? @relation("Next")
+  nextId       String?             @unique @db.VarChar(40)
+  nextNode     WorkflowNode?       @relation("Next", fields: [nextId], references: [id])
+  previousNode WorkflowNode?       @relation("Next")
 
-  rootId String @db.VarChar(40)
-  root Workflow @relation(fields: [rootId], references: [id], onDelete: Cascade)
+  rootId       String              @db.VarChar(40)
+  root         Workflow            @relation(fields: [rootId], references: [id], onDelete: Cascade)
 
-  componentId String? @db.VarChar(40)
-  component Component? @relation(fields: [componentId], references: [id], onDelete: SetNull)
+  componentId  String?             @db.VarChar(40)
+  component    Component?          @relation(fields: [componentId], references: [id], onDelete: SetNull)
 
-  params WorkflowNodeParam[]
+  params       WorkflowNodeParam[]
 }
 
 model WorkflowParam extends Basic {
-  name String? @db.VarChar(255)
+  name              String?             @db.VarChar(255)
 
-  rootId String @db.VarChar(40)
-  root Workflow @relation(fields: [rootId], references: [id], onDelete: Cascade)
+  rootId            String              @db.VarChar(40)
+  root              Workflow            @relation(fields: [rootId], references: [id], onDelete: Cascade)
 
-  componentOutputId String? @db.VarChar(40)
-  componentOutput ComponentOutput? @relation(fields: [componentOutputId], references: [id])
+  componentOutputId String?             @db.VarChar(40)
+  componentOutput   ComponentOutput?    @relation(fields: [componentOutputId], references: [id])
 
-  usingNode WorkflowNodeParam[]
+  usingNode         WorkflowNodeParam[]
 }
 
 model WorkflowScenario extends Basic {
-  recordingId String @db.VarChar(40)
-  scenarioId String @db.VarChar(40)
-  defaultHref String? @db.Text
+  recordingId String   @db.VarChar(40)
+  scenarioId  String   @db.VarChar(40)
+  defaultHref String?  @db.Text
 
-  workflow Workflow @relation(fields: [recordingId], references: [id], onDelete: Cascade)
-  scenario Scenario @relation(fields: [scenarioId], references: [id])
+  workflow    Workflow @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+  scenario    Scenario @relation(fields: [scenarioId], references: [id])
 }
 
 model WorkflowAlias {
-  id String @id @db.VarChar(40)
-  alias String @db.VarChar(255)
+  id         String   @id @db.VarChar(40)
+  alias      String   @db.VarChar(255)
 
-  workflowId String @db.VarChar(40)
-  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId String   @db.VarChar(40)
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 
   @@unique([workflowId, alias])
 }
 
 model Component extends FlowBase {
-  metaData Json?
-  type ComponentType
+  metaData   Json?
+  type       ComponentType
 
   usingNodes WorkflowNode[]
-  outputs ComponentOutput[]
+  outputs    ComponentOutput[]
 }
 
 model ComponentOutput {
-  id String @id @db.VarChar(40)
-  name String @db.VarChar(255)
-  type String
+  id          String          @id @db.VarChar(40)
+  name        String          @db.VarChar(255)
+  type        String
 
-  componentId String @db.VarChar(40)
-  component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
+  componentId String          @db.VarChar(40)
+  component   Component       @relation(fields: [componentId], references: [id], onDelete: Cascade)
 
   usingParams WorkflowParam[]
 }
 
 model WorkflowNodeParam extends Basic {
-  usingPromptLabel String? @db.VarChar(255)
-  type WorkflowNodeParamYype
+  usingPromptLabel String?               @db.VarChar(255)
+  type             WorkflowNodeParamYype
 
-  nodeId String @db.VarChar(40)
-  node WorkflowNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  nodeId           String                @db.VarChar(40)
+  node             WorkflowNode          @relation(fields: [nodeId], references: [id], onDelete: Cascade)
 
-  paramId String @db.VarChar(40)
-  param WorkflowParam? @relation(fields: [paramId], references: [id], onDelete: Cascade)
+  paramId          String                @db.VarChar(40)
+  param            WorkflowParam?        @relation(fields: [paramId], references: [id], onDelete: Cascade)
 }
 
 // enum ⬇ --------------------------------------------------------------------------------------------------------------------------

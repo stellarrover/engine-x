@@ -1,0 +1,81 @@
+diff --git a/node_modules/@imean/model/dist/types/index.d.ts b/node_modules/@imean/model/dist/types/index.d.ts
+index 92c515d..b2969d2 100644
+--- a/node_modules/@imean/model/dist/types/index.d.ts
++++ b/node_modules/@imean/model/dist/types/index.d.ts
+@@ -132,7 +132,7 @@ declare const SelectorDefaultSetting: Selector;
+ declare const ContentDefaultSetting: Content;
+ declare const NearbyElementContentDefaultSetting: NearbyElementContent;
+ 
+-interface ImgMarkValue {
++type ImgMarkValue = {
+     scale: number;
+     x: number;
+     y: number;
+@@ -147,7 +147,7 @@ declare enum AffixType {
+     "image" = "image",
+     "other" = "other"
+ }
+-interface Affix {
++type Affix = {
+     key: string;
+     type: AffixType;
+     name: string;
+@@ -162,7 +162,7 @@ declare enum InvalidType {
+     "fixed" = "fixed",
+     "warning" = "warning"
+ }
+-interface PaginationBehavior {
++type PaginationBehavior = {
+     type: "click" | "scroll" | "unset";
+     selector: string;
+ }
+@@ -173,11 +173,11 @@ type StepModel = "guide" | "notice" | "tooltip";
+ type StepIframe = {
+     selector?: string;
+     devicePixelRatio?: number;
+-    rect?: DOMRect;
++    rect?: any;
+     iframe?: StepIframe;
+ };
+ type ButtonPosition = "left" | "center" | "right";
+-interface AttributesInfo {
++type AttributesInfo = {
+     data: {
+         "aria-label"?: string;
+         "aria-controls"?: string;
+@@ -195,7 +195,7 @@ type RewardOption = {
+     optional?: string;
+     required?: string;
+ };
+-interface MatchConstraint {
++type MatchConstraint = {
+     relation: "self" | "sibling" | "parent";
+     selector: string;
+     condition: "include" | "exclude";
+@@ -205,7 +205,7 @@ interface MatchConstraint {
+  *
+  * @deprecated
+  */
+-interface MatchDependencies {
++type MatchDependencies = {
+     /**
+      * 依赖项的选择器
+      */
+@@ -304,7 +304,7 @@ declare enum ValueOperationType {
+      */
+     Division = "Division"
+ }
+-interface Step {
++type Step = {
+     /**
+      * 步骤id
+      */
+@@ -382,7 +382,7 @@ interface Step {
+     /**
+      * rect
+      */
+-    rect?: DOMRect;
++    rect?: any;
+     /**
+      * audios
+      */
