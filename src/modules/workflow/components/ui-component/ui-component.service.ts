@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUiComponentInput } from './dto/create-ui-component.input';
 import { UpdateUiComponentInput } from './dto/update-ui-component.input';
+import { UiComponentRepository } from './ui-component.repository';
 
 @Injectable()
 export class UiComponentService {
-  create(createUiComponentInput: CreateUiComponentInput) {
-    console.log('createUiComponentInput', createUiComponentInput);
-    return 'This action adds a new uiComponent';
+  constructor(private repository: UiComponentRepository) {}
+
+  async create(userId: string, input: CreateUiComponentInput) {
+    const component = await this.repository.create(userId, input);
+
+    // related operations ⬇
+    await this.repository.refreshOutputs(component);
+    // TODO - ...
   }
 
   findAll() {

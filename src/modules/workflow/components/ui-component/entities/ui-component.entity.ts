@@ -30,10 +30,7 @@ export class UiComponent implements Component {
   version: number;
 
   @Field(() => [StepScalar], { nullable: true })
-  metaData: Step[] | null;
+  metadata: Step[] | null;
 
   type: ComponentType = ComponentType.UI;
 }
-
-const rest = new UiComponent();
-rest.metaData = undefined;

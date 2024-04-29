@@ -8,12 +8,11 @@ import { UpdateUiComponentInput } from './dto/update-ui-component.input';
 export class UiComponentResolver {
   constructor(private readonly uiComponentService: UiComponentService) {}
 
-  @Mutation(() => UiComponent)
-  createUiComponent(
-    @Args('createUiComponentInput')
-    createUiComponentInput: CreateUiComponentInput,
-  ) {
-    return this.uiComponentService.create(createUiComponentInput);
+  @Mutation(() => Boolean)
+  async createUiComponent(@Args('input') input: CreateUiComponentInput) {
+    await this.uiComponentService.create('', input);
+
+    return true;
   }
 
   @Query(() => [UiComponent], { name: 'uiComponent' })

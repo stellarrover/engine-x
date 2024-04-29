@@ -6,7 +6,7 @@ export class WorkflowParam implements Prisma.WorkflowParamCreateInput {
   updatedAt?: string | Date;
   name?: string;
   root: Prisma.WorkflowCreateNestedOneWithoutParamsInput;
-  componentOutput?: Prisma.ComponentOutputCreateNestedOneWithoutUsingParamsInput;
+  ComponentParam?: Prisma.ComponentParamCreateNestedOneWithoutUsingParamsInput;
   usingNode?: Prisma.WorkflowNodeParamCreateNestedManyWithoutParamInput;
 }
 

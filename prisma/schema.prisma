@@ -168,8 +168,8 @@ model WorkflowParam {
     name String? @db.VarChar(255)
     rootId String @db.VarChar(40)
     root Workflow @relation(fields: [rootId], references: [id], onDelete: Cascade)
-    componentOutputId String? @db.VarChar(40)
-    componentOutput ComponentOutput? @relation(fields: [componentOutputId], references: [id])
+    ComponentParamId String? @db.VarChar(40)
+    ComponentParam ComponentParam? @relation(fields: [ComponentParamId], references: [id])
     usingNode WorkflowNodeParam[]
 }
 
@@ -205,16 +205,17 @@ model Component {
     title String @db.VarChar(255)
     description String @db.VarChar(255)
     version Int @default(0)
-    metaData Json?
+    metadata Json?
     type ComponentType
     usingNodes WorkflowNode[]
-    outputs ComponentOutput[]
+    outputs ComponentParam[]
 }
 
-model ComponentOutput {
+model ComponentParam {
     id String @id() @db.VarChar(40)
     name String @db.VarChar(255)
     type String
+    metadata Json?
     componentId String @db.VarChar(40)
     component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
     usingParams WorkflowParam[]
