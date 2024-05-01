@@ -4,7 +4,7 @@ import { Readable } from 'stream';
 import fs from 'fs';
 import path from 'path';
 import { STORAGE_PATH, STORAGE_WITHOUT_HOST } from 'src/common/config';
-import { enginePath, engineURL } from '@utils';
+import { enginePath, engineURL } from 'src/common/utils/utils';
 import mime from 'mime';
 
 @Injectable()

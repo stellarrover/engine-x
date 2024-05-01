@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FileUploadManagerInterface } from '../file-upload.manager';
 import { Readable } from 'stream';
-import { enginePath, stream2buffer } from '@utils';
+import { enginePath, stream2buffer } from 'src/common/utils/utils';
 import {
   GetObjectCommand,
   PutObjectCommand,

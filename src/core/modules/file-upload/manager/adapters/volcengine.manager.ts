@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FileUploadManagerInterface } from '../file-upload.manager';
 import { Readable } from 'stream';
-import { stream2buffer } from '@utils';
+import { stream2buffer } from 'src/common/utils/utils';
 import TosClient from '@volcengine/tos-sdk';
 import {
   VOLCENGINE_ACCESS_KEY,

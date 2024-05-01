@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { SafeJsonType } from 'safe-json-type';
-import { APP_HOST, APP_PREFIX } from './config';
+import { APP_HOST, APP_PREFIX } from '../config';
 import { Readable } from 'stream';
 
 /**

@@ -39,6 +39,7 @@
     "@zenstackhq/runtime": "1.12.1",
     "bs58": "^5.0.0",
     "cache-manager": "^5.5.1",
+    "canvas": "^2.11.2",
     "dotenv": "^16.4.5",
     "eth-sig-util": "^3.0.1",
     "graphql": "^16.8.1",
