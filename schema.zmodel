@@ -184,14 +184,13 @@ model ComponentParam {
 }
 
 model WorkflowNodeParam extends Basic {
-  usingPromptLabel String?               @db.VarChar(255)
-  type             WorkflowNodeParamYype
+  type    WorkflowNodeParamYype
 
-  nodeId           String                @db.VarChar(40)
-  node             WorkflowNode          @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  nodeId  String                @db.VarChar(40)
+  node    WorkflowNode          @relation(fields: [nodeId], references: [id], onDelete: Cascade)
 
-  paramId          String                @db.VarChar(40)
-  param            WorkflowParam?        @relation(fields: [paramId], references: [id], onDelete: Cascade)
+  paramId String                @db.VarChar(40)
+  param   WorkflowParam?        @relation(fields: [paramId], references: [id], onDelete: Cascade)
 }
 
 // enum ⬇ --------------------------------------------------------------------------------------------------------------------------

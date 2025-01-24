@@ -225,7 +225,6 @@ model WorkflowNodeParam {
     id String @id() @db.VarChar(40)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()
-    usingPromptLabel String? @db.VarChar(255)
     type WorkflowNodeParamYype
     nodeId String @db.VarChar(40)
     node WorkflowNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)

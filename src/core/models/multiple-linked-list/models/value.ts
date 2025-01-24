@@ -24,25 +24,25 @@ export abstract class MultipleLinkedValue {
   /**
    * 下一个节点标识符
    */
-  protected _nextId?: string | null | undefined;
-  get nextId(): string | null | undefined {
-    return this._nextId;
+  protected _nextId?: string | null;
+  get nextId(): string | null {
+    return this._nextId ?? null;
   }
 
   /**
    * 父节点标识符
    */
-  protected _parentId?: string | null | undefined;
-  get parentId(): string | null | undefined {
-    return this._parentId;
+  protected _parentId?: string | null;
+  get parentId(): string | null {
+    return this._parentId ?? null;
   }
 
   /**
    * 子链表优先级，只在子链表头节点存储
    */
-  protected _priority?: number | null | undefined;
-  get priority(): number | null | undefined {
-    return this._priority;
+  protected _priority?: number | null;
+  get priority(): number | null {
+    return this._priority ?? null;
   }
 
   /**

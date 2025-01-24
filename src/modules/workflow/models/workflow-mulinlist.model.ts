@@ -1,33 +1,21 @@
-import {
-  MultipleLinkedList,
-  MultipleLinkedListNode,
-  MultipleLinkedValue,
-} from '@multiple-linked-list';
-import { $Enums, Prisma } from '@prisma/client';
+import { MultipleLinkedList, MultipleLinkedListNode, MultipleLinkedValue } from '@multiple-linked-list';
+import { $Enums, Component, WorkflowNode } from '@prisma/client';
+import { OmitType } from 'src/common/types/omit.type';
+import { WorkflowNodeInput, WorkflowNodeOutput } from './workflow-param.model';
 
-export class XMuLinList extends MultipleLinkedList<
-  XMuLinListValue,
-  XMuLinListNode
-> {
+export class XMuLinList extends MultipleLinkedList<XMuLinListValue, XMuLinListNode> {
   toExecList(): XMuLinListValue[] {
     return this.root.toExecList();
   }
 }
 
-export class XMuLinListNode extends MultipleLinkedListNode<
-  XMuLinListValue,
-  XMuLinListNode
-> {
+export class XMuLinListNode extends MultipleLinkedListNode<XMuLinListValue, XMuLinListNode> {
   /**
    * @param {T} value - 当前节点的值
    * @param {XMuLinListNode[]} [children] - 子链表
    * @param {XMuLinListNode} next - 下一个节点
    */
-  constructor(
-    value: XMuLinListValue,
-    children?: XMuLinListNode[],
-    next?: XMuLinListNode,
-  ) {
+  constructor(value: XMuLinListValue, children?: XMuLinListNode[], next?: XMuLinListNode) {
     super(value, children, next);
   }
 
@@ -52,22 +40,28 @@ export class XMuLinListNode extends MultipleLinkedListNode<
 
 export class XMuLinListValue
   extends MultipleLinkedValue
-  implements Prisma.WorkflowNodeCreateInput
+  implements Omit<WorkflowNode, OmitType | 'rootId' | 'componentId'>
 {
-  createdAt?: string | Date;
-  updatedAt?: string | Date;
-  deleted?: boolean;
-  deletedAt?: string | Date;
-  lastEditorId?: string;
   type: $Enums.WorkflowNodeType;
-  optional?: boolean;
-  prompt?: string;
-  creator?: Prisma.UserCreateNestedOneWithoutWorkflowNodesInput;
-  parentNode?: Prisma.WorkflowNodeCreateNestedOneWithoutSubNodesInput;
-  subNodes?: Prisma.WorkflowNodeCreateNestedManyWithoutParentNodeInput;
-  nextNode?: Prisma.WorkflowNodeCreateNestedOneWithoutPreviousNodeInput;
-  previousNode?: Prisma.WorkflowNodeCreateNestedOneWithoutNextNodeInput;
-  root: Prisma.WorkflowCreateNestedOneWithoutSubFlowsInput;
-  component?: Prisma.ComponentCreateNestedOneWithoutUsingNodesInput;
-  params?: Prisma.WorkflowNodeParamCreateNestedManyWithoutNodeInput;
+  optional: boolean;
+  prompt: string | null;
+  component?: Component | null;
+  inputs: WorkflowNodeInput[];
+  outputs: WorkflowNodeOutput[];
+
+  constructor(
+    init: WorkflowNode & {
+      inputs: WorkflowNodeInput[];
+      outputs: WorkflowNodeOutput[];
+      component?: Component | null;
+    },
+  ) {
+    super(init);
+    this.type = init.type;
+    this.optional = init.optional;
+    this.prompt = init.prompt;
+    this.component = init.component;
+    this.inputs = init.inputs;
+    this.outputs = init.outputs;
+  }
 }

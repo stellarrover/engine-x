@@ -9,6 +9,9 @@ export abstract class MultipleLinkedList<
   get root(): K {
     return this._root;
   }
+  set root(value: K) {
+    this._root = value;
+  }
 
   flatten(): T[] {
     return this._root.flatten();

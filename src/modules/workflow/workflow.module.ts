@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { WorkflowResolver } from './workflow.resolver';
+import { WorkflowMuLinListFactory } from './factories/workflow-mulinlist.factory';
+import { WorkflowRepository } from './workflow.repository';
 import { WorkflowService } from './workflow.service';
 
 /**
@@ -10,6 +11,7 @@ import { WorkflowService } from './workflow.service';
  * @description 3. 通过节点的输入输出关系，实现组件之间的数据传递
  */
 @Module({
-  providers: [WorkflowResolver, WorkflowService],
+  providers: [WorkflowService, WorkflowRepository, WorkflowMuLinListFactory],
+  exports: [WorkflowService],
 })
 export class WorkflowModule {}

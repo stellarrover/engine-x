@@ -28,7 +28,7 @@ module.exports = {
       files: ['**/*.spec.ts', 'integration/**/*.ts'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: 'tsconfig.spec.json',
+        project: 'tsconfig.json',
         sourceType: 'module',
       },
       rules: {
